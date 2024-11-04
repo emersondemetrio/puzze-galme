@@ -1,19 +1,5 @@
-import { MAX_XY, MIN_XY, TOTAL_TILES } from './constants';
 import { AvailableAttributeKey, Position } from './types';
-
-export const generateRandomTable = () => {
-	const table: Array<number> = [];
-
-	while (table.length < TOTAL_TILES) {
-		const generated = Math.floor(Math.random() * TOTAL_TILES) + 1;
-
-		if (table.indexOf(generated) === -1) {
-			table.push(generated);
-		}
-	}
-
-	return table;
-};
+import { MAX_XY, MIN_XY } from './utils/constants';
 
 export const exists = ({ x, y }: Position) =>
 	x <= MAX_XY && y <= MAX_XY && x >= MIN_XY && y >= MIN_XY;

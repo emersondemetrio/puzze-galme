@@ -1,13 +1,11 @@
-import { Keys } from './constants';
 import {
+	AvailableKeyHandlers,
 	FullElement,
 	Position,
 	PressableKeys,
-	AvailableKeyHandlers,
 } from './types';
 import {
 	exists,
-	generateRandomTable,
 	getNextDown,
 	getNextLeft,
 	getNextRight,
@@ -15,23 +13,11 @@ import {
 	getXYOf,
 	updateAttribute,
 } from './utils';
+import { Keys } from './utils/constants';
 
 alert(1);
 
 const body = document.querySelector('body');
-const loading = document.getElementById('loading');
-const container = document.getElementById('container');
-const restartButton = document.getElementById('restart');
-
-const showLoading = () => {
-	loading!.classList.remove('hide');
-	container!.classList.add('hide');
-};
-
-const hideLoading = () => {
-	loading!.classList.add('hide');
-	container!.classList.remove('hide');
-};
 
 const getEmptyTile = (): Element =>
 	document.querySelectorAll('[data-value="empty"]')[0] as Element;
@@ -90,40 +76,6 @@ const getFullElementFromCoordinates = ({ x, y }: Position): FullElement => {
 	};
 };
 
-const resetTable = () => {
-	showLoading();
-
-	return new Promise((resolve) => {
-		const table = generateRandomTable();
-		let valueIndex = 0;
-
-		for (let x = 0; x <= 3; x++) {
-			for (let y = 0; y <= 3; y++) {
-				const tile = getFullElementFromCoordinates({ x, y });
-				tile.element.setAttribute('data-value', `${table[valueIndex]}`);
-				tile.element.innerHTML = `${table[valueIndex]}`;
-				valueIndex++;
-			}
-		}
-
-		const emptyTile = getFullElementFromCoordinates({ x: 3, y: 3 });
-		emptyTile.element.setAttribute('data-value', 'empty');
-		emptyTile.element.innerHTML = '';
-
-		resolve(() => {
-			setTimeout(() => {
-				hideLoading();
-			}, 1500);
-		});
-	});
-};
-
-const initGame = async () => {
-	await resetTable();
-};
-
-restartButton?.addEventListener('click', resetTable);
-
 const KeyHandler: AvailableKeyHandlers = {
 	ArrowLeft: () => swapEmptyWith(Keys.RIGHT),
 	ArrowRight: () => swapEmptyWith(Keys.LEFT),
@@ -138,5 +90,3 @@ body!.addEventListener('keydown', (e) => {
 		KeyHandler[pressedKey]();
 	}
 });
-
-initGame();
